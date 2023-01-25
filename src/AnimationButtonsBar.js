@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import { Globals } from "./Globals";
 
 export class AnimationButtonsBar {
     constructor() {
@@ -17,6 +18,7 @@ export class AnimationButtonsBar {
         this.height = height;
 
         this.createBackground();
+        this.createButtons();
     }
 
     createBackground() {
@@ -45,6 +47,12 @@ export class AnimationButtonsBar {
                 background.drawRect(x,y, width, height);
                 background.endFill();
 
+                background.interactive = true;
+                background.on('pointerdown', () => {
+                    console.log(`You clicked ${element.name}`);
+                    this.setAnimationCharacter(element.name);
+                });
+
                 const animationText = new PIXI.Text();
                 animationText.anchor.set(0.5);
                 animationText.x = x + this.width /2;
@@ -66,8 +74,16 @@ export class AnimationButtonsBar {
 
     }
 
+    setAnimationCharacter(animationName) {
+        this.selectedCharacter.spine.state.setAnimation(0, animationName, true);
+        this.selectedCharacter.nameAnimationSelected = animationName;
+        Globals.selectedCharacter.nameAnimationSelected = animationName;
+
+    }
+
     selectCharacter(character) {
         this.selectedCharacter = character;
+        Globals.selectedCharacter = character;
         this.createButtons();
 
     }

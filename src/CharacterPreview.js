@@ -38,14 +38,14 @@ export class CharacterPreview {
         console.log("Inicio Character");
         Globals.app.loader.add(characterName, 'assets/spineboy.json').load((loader, resources) => {
             //Globals.app.stage.interactive = true;
-            const spineBoy = new Spine(resources.character.spineData);
+            const spineCharacter = new Spine(resources.character.spineData);
 
             //spineBoy.stateData.setMix('walk', 'jump', 0.2);
             //spineBoy.stateData.setMix('jump', 'walk', 0.4);
 
-            spineBoy.state.setAnimation(0, 'walk', true);
+            //spineBoy.state.setAnimation(0, 'walk', true);
 
-            let character = new Character(spineBoy,characterName, spineBoy.spineData.animations);
+            let character = new Character(spineCharacter,characterName, spineCharacter.spineData.animations);
 
             Globals.characters.push(character);
 
@@ -62,11 +62,11 @@ export class CharacterPreview {
             let heightCharacter = 0;
 
             if((this.height / this.width) > (character.spine.height / character.spine.width)) {
-                widthCharacter = this.width*0.8;
+                widthCharacter = this.width*0.5;
                 heightCharacter = (character.spine.height*widthCharacter)/character.spine.width;
                 console.log("ancho grande", widthCharacter, heightCharacter);
             } else {
-                heightCharacter = this.height*0.8;
+                heightCharacter = this.height*0.5;
                 widthCharacter = (heightCharacter*character.spine.width)/character.spine.height;             
 
             }
@@ -77,6 +77,7 @@ export class CharacterPreview {
             character.spine.y = this.y  + (character.spine.height + (this.height-character.spine.height)/2);
             
             console.log(character.spine.spineData.animations);
+            console.log(character.spine);
             
             this.container.addChild(character.spine);
 

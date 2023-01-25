@@ -6,6 +6,7 @@ export class Character {
         this.spine = character;
         this.name = name;
         this.animations = animations;
+        this.nameAnimationSelected = null;
     }
 
     get left() {
@@ -25,7 +26,5 @@ export class Character {
         return this.spine.y;
 
     }
-
-
 
 }
