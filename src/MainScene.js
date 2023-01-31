@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { TilingSprite } from "pixi.js";
 import { AnimationButtonsBar } from "./AnimationButtonsBar";
 import { CharacterPreview } from "./CharacterPreview";
+import { FrameRateBar } from "./FrameRateBar";
 import { Globals } from "./Globals";
 import { PlayPauseBar } from "./PlayPauseBar";
 import { SkinsButtonBar } from "./SkinsButtonBar";
@@ -14,6 +15,9 @@ export class MainScene {
         this.playPauseBar = new PlayPauseBar();
         this.animationButtonsBar = new AnimationButtonsBar();
         this.characterPreview =  new CharacterPreview();
+        this.frameRateBar = new FrameRateBar();
+
+        Globals.animationButtonsBar = this.animationButtonsBar;
     }
 
     init() {
@@ -32,6 +36,7 @@ export class MainScene {
                 y >= character.top &&
                 y <= character.bottom) {
                     console.log("You clicked the character!");
+                    character.isDragging = true;
                     this.animationButtonsBar.selectCharacter(character);
                 }
 
@@ -57,11 +62,15 @@ export class MainScene {
         this.characterPreview.init(characterPreviewBouds.x, characterPreviewBouds.y, characterPreviewBouds.width, characterPreviewBouds.height); 
         this.container.addChild(this.characterPreview.container);
 
-        this.container.interactive = true;
-        this.container.on("pointerdown", (event) => {
+        const frameRateBarBounds = this.calculateBoundsFrameRateBar();
+        this.frameRateBar.init(frameRateBarBounds.x, frameRateBarBounds.y, frameRateBarBounds.width);
+        this.container.addChild(this.frameRateBar.container);
+
+        //this.container.interactive = true;
+        /*this.container.on("pointerdown", (event) => {
             console.log("You click main", event.data.global.x, event.data.global.y);
             this.checkClickOnCharacter(event.data.global.x, event.data.global.y);
-        });
+        });*/
     }
 
     calculateBoundsSkinButtonBar() {
@@ -144,6 +153,21 @@ export class MainScene {
             x: x,
             y: y,
             height: height,
+            width: width
+        }
+
+    }
+
+    calculateBoundsFrameRateBar() {
+        const offsetWidth = 10;
+        const offsetHeight = 10;
+        const width = Math.floor(Globals.appWitdh*0.8) - offsetWidth;
+        const x = offsetWidth;
+        const y = Math.floor(Globals.appHeight*0.15) - offsetHeight;
+
+        return {
+            x: x,
+            y: y,
             width: width
         }
 

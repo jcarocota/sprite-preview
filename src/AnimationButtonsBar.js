@@ -4,7 +4,6 @@ import { Globals } from "./Globals";
 export class AnimationButtonsBar {
     constructor() {
         this.container = null;
-        this.selectedCharacter = null;
     }
 
     init(x = 10, y = 10, width = 100, height = 100) {
@@ -31,17 +30,17 @@ export class AnimationButtonsBar {
     }
 
     createButtons() {
-        if(!this.selectedCharacter) {
+        if(!Globals.selectedCharacter) {
             return;
         }
 
-        if(this.selectedCharacter.animations) {
+        if(Globals.selectedCharacter.animations) {
             const x = this.x +10;
             let y = this.y +10;
             const width = this.width - 20;
             const height = 30;
 
-            this.selectedCharacter.animations.forEach(element => {
+            Globals.selectedCharacter.animations.forEach(element => {
                 const background = new PIXI.Graphics();
                 background.beginFill(0xba4a00 );
                 background.drawRect(x,y, width, height);
@@ -75,15 +74,13 @@ export class AnimationButtonsBar {
     }
 
     setAnimationCharacter(animationName) {
-        this.selectedCharacter.spine.state.setAnimation(0, animationName, true);
-        this.selectedCharacter.nameAnimationSelected = animationName;
+        Globals.selectedCharacter.spine.state.setAnimation(0, animationName, true);
         Globals.selectedCharacter.nameAnimationSelected = animationName;
-
     }
 
-    selectCharacter(character) {
-        this.selectedCharacter = character;
-        Globals.selectedCharacter = character;
+    selectCharacter() {
+        //this.selectedCharacter = character;
+        //Globals.selectedCharacter = character;
         this.createButtons();
 
     }

@@ -3,5 +3,6 @@ export const Globals = {
     appHeight: null,
     app: null,
     selectedCharacter: null,
-    characters: []
+    characters: [],
+    animationButtonsBar: null
 }

@@ -51,6 +51,17 @@ export class App {
         ev.preventDefault();
         this.mainScene.hideDragDropFilesMessage();
 
+        /*const fs = require('fs');
+        const os = require('os');
+        const path = require('path');
+
+        let tmpDir;
+        const appPrefix = 'spine-preview';
+        
+        let nameAltas = null;
+        let nameJson = null;
+        let namePng = null;
+
         //console.log("droped");
 
         if (ev.dataTransfer.items) {
@@ -61,6 +72,55 @@ export class App {
                 const file = item.getAsFile();
                 console.log(`… file[${i}].name = ${file.name}`);
                 console.log(file);
+                console.log(file.name);
+
+                let fileExtension = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name) : undefined;
+                fileExtension = fileExtension ? fileExtension[0] : undefined; 
+                console.log('fileExtension', fileExtension);
+
+                switch (fileExtension) {
+                    case 'json':
+                        nameJson = file.name;
+                        break;
+                    case 'atlas': 
+                        nameAltas = file.name;
+                        break;
+                    case 'png':
+                        namePng = file.name;
+                        break;
+                }
+
+                let fr = new FileReader();
+                fr.onload = (e) => {
+                    console.log("File read!");
+                    console.log(fr.result);
+
+                    try {
+                        tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
+                        console.log('tmpDir', tmpDir);
+                        // the rest of your app goes here
+                      }
+                      catch {
+                        // handle error
+                      }
+                      finally {
+                        try {
+                          if (tmpDir) {
+                            fs.rmSync(tmpDir, { recursive: true });
+                          }
+                        }
+                        catch (e) {
+                          console.error(`An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`);
+                        }
+                      }
+
+                    this.mainScene.addCharacterToPreview(e.target.result);
+                }
+
+                fr.readAsDataURL(file);
+
+                let url = window.URL.createObjectURL(file);
+                console.log("url", url);
               }
             });
           } else {
@@ -68,11 +128,22 @@ export class App {
             [...ev.dataTransfer.files].forEach((file, i) => {
               console.log(`… file[${i}].name = ${file.name}`);
               console.log(file);
+              console.log(file.path);
+              
+             
             });
           }
 
+          console.log('ev.dataTransfer', ev.dataTransfer);
+
+          if(!nameAltas || !nameJson || !namePng) {
+            //not complete... show error
+          } else {
+            //this.mainScene.addCharacterToPreview(null);
+          }
+*/
         
-          this.mainScene.addCharacterToPreview(null);
+          
         
     }
 

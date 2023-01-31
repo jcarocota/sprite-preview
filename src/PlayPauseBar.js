@@ -50,9 +50,11 @@ export class PlayPauseBar {
             if((!Globals.selectedCharacter.spine.state.queue.animState.tracks ||
                 Globals.selectedCharacter.spine.state.queue.animState.tracks.length == 0)) {
                     Globals.selectedCharacter.spine.state.setAnimation(0, Globals.selectedCharacter.nameAnimationSelected, true);
+                    Globals.selectedCharacter.playingAnimation = true;
             } else {
                 Globals.selectedCharacter.spine.state.queue.animState.clearTracks();
                 Globals.selectedCharacter.spine.skeleton.setToSetupPose();
+                Globals.selectedCharacter.playingAnimation = false;
             }
             console.log(Globals.selectedCharacter.spine.skeleton);
             

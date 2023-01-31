@@ -34,9 +34,12 @@ export class CharacterPreview {
 
     addCharacterToPreview(resource) {
         const characterName = "character";
+        //console.log("recurso", resource);
     
         console.log("Inicio Character");
-        Globals.app.loader.add(characterName, 'assets/spineboy.json').load((loader, resources) => {
+        //let file = require();
+        //console.log("file", file);
+        Globals.app.loader.add(characterName, './assets/spineboy.json').load((loader, resources) => {
             //Globals.app.stage.interactive = true;
             const spineCharacter = new Spine(resources.character.spineData);
 
@@ -50,7 +53,7 @@ export class CharacterPreview {
             Globals.characters.push(character);
 
             //this.container.addChild(spineBoy);
-            console.log("Carga completa");
+            //console.log("Carga completa");
             this.drawCharacters();
             
         });
@@ -79,7 +82,7 @@ export class CharacterPreview {
             console.log(character.spine.spineData.animations);
             console.log(character.spine);
             
-            this.container.addChild(character.spine);
+            this.container.addChild(character.container);
 
             
         })
