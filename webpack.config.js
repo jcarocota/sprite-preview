@@ -1,32 +1,29 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
-
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
+  mode: "development",
+  entry: "./src/index.js",
   output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, path.join('dist')),
-    clean: true
+    filename: "main.js",
+    path: path.resolve(__dirname, path.join("dist")),
+    clean: true,
   },
   plugins: [
-    new HtmlWebpackPlugin({ title: 'The game' }),
+    new HtmlWebpackPlugin({ title: "The game" }),
     new CopyPlugin({
-      patterns: [{ from: 'src/assets', to: 'assets' }],
+      patterns: [{ from: "src/assets", to: "assets" }],
     }),
-    new NodePolyfillPlugin()
+    new NodePolyfillPlugin(),
   ],
   module: {
-    rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }
-    ]
+    rules: [{ test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" }],
   },
   devServer: {
-    allowedHosts: 'auto',
-    port: 9000
+    allowedHosts: "auto",
+    port: 9000,
   },
-  devtool: 'inline-source-map'
+  devtool: "inline-source-map",
 };

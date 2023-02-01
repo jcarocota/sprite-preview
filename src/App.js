@@ -1,57 +1,57 @@
 import * as PIXI from "pixi.js";
 import { Globals } from "./Globals";
 import { MainScene } from "./MainScene";
+import { Config } from "./Config";
 
 export class App {
-    run() {
-        console.log("Run app perrito");
-        this.app = new PIXI.Application({
-            autoResize: true,
-            resolution: devicePixelRatio,
-            backgroundColor: 0x1099bb 
-        });
+  run() {
+    console.log("Run app perrito");
+    this.app = new PIXI.Application({
+      autoResize: true,
+      resolution: devicePixelRatio,
+      backgroundColor: 0x1099bb,
+    });
 
-        document.body.appendChild(this.app.view);
-        this.mainScene = new MainScene();
-        
-        window.addEventListener('resize', this.resizeWindow.bind(this));
+    document.body.appendChild(this.app.view);
+    this.mainScene = new MainScene();
 
-        const canvas = document.getElementsByTagName("canvas").item(0);
-        
-        canvas.addEventListener("dragover", this.dragOverElement.bind(this));
-        canvas.addEventListener("drop", this.dropFile.bind(this));
-        
-        document.addEventListener("mousemove", this.mouseLeaveCanvas.bind(this));
+    window.addEventListener("resize", this.resizeWindow.bind(this));
 
-        Globals.app = this.app;
+    const canvas = document.getElementsByTagName("canvas").item(0);
 
+    canvas.addEventListener("dragover", this.dragOverElement.bind(this));
+    canvas.addEventListener("drop", this.dropFile.bind(this));
 
-        this.resizeWindow();
-        this.mainScene.addCharacterToPreview(null);
-    }
+    document.addEventListener("mousemove", this.mouseLeaveCanvas.bind(this));
 
-    resizeWindow() {
-        Globals.appWitdh = window.innerWidth-20;
-        Globals.appHeight = window.innerHeight-20;
-        this.app.renderer.resize(Globals.appWitdh, Globals.appHeight);
-        this.mainScene.init();
-        this.app.stage.addChild(this.mainScene.container);
-    }
+    Globals.app = this.app;
 
-    dragOverElement(ev) {
-        ev.preventDefault();
-        this.mainScene.showDragDropFilesMessage();
-        //console.log(ev);
-        //console.log("gatito");
-    }
+    this.resizeWindow();
+    this.mainScene.addCharacterToPreview(null);
+  }
 
-    dropFile(ev) {
-        //console.log(ev);
-        //ev.stopr
-        ev.preventDefault();
-        this.mainScene.hideDragDropFilesMessage();
+  resizeWindow() {
+    Globals.appWitdh = window.innerWidth - Config.windowPadding;
+    Globals.appHeight = window.innerHeight - Config.windowPadding;
+    this.app.renderer.resize(Globals.appWitdh, Globals.appHeight);
+    this.mainScene.init();
+    this.app.stage.addChild(this.mainScene.container);
+  }
 
-        /*const fs = require('fs');
+  dragOverElement(ev) {
+    ev.preventDefault();
+    this.mainScene.showDragDropFilesMessage();
+    //console.log(ev);
+    //console.log("gatito");
+  }
+
+  dropFile(ev) {
+    //console.log(ev);
+    //ev.stopr
+    ev.preventDefault();
+    this.mainScene.hideDragDropFilesMessage();
+
+    /*const fs = require('fs');
         const os = require('os');
         const path = require('path');
 
@@ -142,23 +142,20 @@ export class App {
             //this.mainScene.addCharacterToPreview(null);
           }
 */
-        
-          
-        
-    }
+  }
 
-    mouseLeaveCanvas(ev) {
-        //console.log(ev.offsetX, ev.offsetY);
-        this.mainScene.hideDragDropFilesMessage();
-    }
+  mouseLeaveCanvas(ev) {
+    //console.log(ev.offsetX, ev.offsetY);
+    this.mainScene.hideDragDropFilesMessage();
+  }
 
-    /*
+  /*
     onResizeWindow() {
         console.log("perrito");
         //this.app.view.rresizeTo(window.innerWidth, window.innerHeight);
     }*/
 
-    /*
+  /*
     scaleToWindow() {
         const canvas = this.app.view; // PIXI.Application.view
         let scaleX, scaleY, scale, center;
@@ -191,5 +188,4 @@ export class App {
         return scale;
     }; 
     */
-
 }
