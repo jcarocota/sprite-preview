@@ -18,6 +18,7 @@ export class MainScene {
     this.frameRateBar = new FrameRateBar();
 
     Globals.animationButtonsBar = this.animationButtonsBar;
+    Globals.skinButtonsBar = this.skinsButtonBar;
   }
 
   init() {
@@ -145,22 +146,6 @@ export class MainScene {
     };
   }
 
-  calculateBoundsAnimationButtonsBar() {
-    const offsetWidth = 10;
-    const offsetHeight = 10;
-    const width = Math.floor(Globals.appWitdh * 0.2) - offsetWidth * 2;
-    const height = Math.floor(Globals.appHeight * 0.65) - offsetHeight * 1;
-    const x = Math.floor(Globals.appWitdh * 0.8) + offsetWidth;
-    const y = Math.floor(Globals.appHeight * 0.15) + offsetHeight;
-
-    return {
-      x: x,
-      y: y,
-      height: height,
-      width: width,
-    };
-  }
-
   calculateBoundsCharacterPreview() {
     const offsetWidth = 10;
     const offsetHeight = 10;
@@ -240,7 +225,13 @@ export class MainScene {
     }
   }
 
-  addCharacterToPreview(resource) {
+  /*addCharacterToPreview(resource) {
     this.characterPreview.addCharacterToPreview(resource);
+  }*/
+
+  addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData) {
+    if (rawSkeletonData && rawAtlasData && imageData) {
+      this.characterPreview.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+    }
   }
 }

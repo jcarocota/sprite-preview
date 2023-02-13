@@ -1,7 +1,9 @@
 import * as PIXI from "pixi.js";
-import { Spine } from "pixi-spine";
+import { Spine, TextureAtlas, ISkeletonData} from "pixi-spine";
 import { Globals } from "./Globals";
 import { Character } from "./Character";
+import { BaseTexture } from "pixi.js";
+import * as SpineRuntime from "@pixi-spine/runtime-4.1";
 
 export class CharacterPreview {
   constructor() {
@@ -32,13 +34,14 @@ export class CharacterPreview {
     this.container.addChild(background);
   }
 
-  addCharacterToPreview(resource) {
+  /*addCharacterToPreview(resource) {
     const characterName = "character";
     //console.log("recurso", resource);
 
     console.log("Inicio Character");
     //let file = require();
     //console.log("file", file);
+    
     Globals.app.loader
       .add(characterName, "./assets/spineboy.json")
       .load((loader, resources) => {
@@ -62,6 +65,34 @@ export class CharacterPreview {
         //console.log("Carga completa");
         this.drawCharacters();
       });
+  }*/
+
+  addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData) {
+    const characterName = "character";
+    console.log("Inicio Character");
+
+    let spineAtlas = new TextureAtlas(rawAtlasData, (path, callback) => {
+      callback(BaseTexture.from(imageData));
+    });
+
+    let spineAtlasLoader = new SpineRuntime.AtlasAttachmentLoader(spineAtlas);
+    let spineJsonParser = new SpineRuntime.SkeletonJson(spineAtlasLoader);
+
+    spineJsonParser.scale = 0.25;
+
+    let spineData = spineJsonParser.readSkeletonData(rawSkeletonData);
+
+    const spineCharacter = new Spine(spineData);
+
+    let character = new Character(
+      spineCharacter,
+      characterName,
+      spineCharacter.spineData.animations
+    );
+
+    Globals.characters.push(character);
+
+    this.drawCharacters();
   }
 
   drawCharacters() {
@@ -76,7 +107,7 @@ export class CharacterPreview {
         widthCharacter = this.width * 0.5;
         heightCharacter =
           (character.spine.height * widthCharacter) / character.spine.width;
-        console.log("ancho grande", widthCharacter, heightCharacter);
+        //console.log("ancho grande", widthCharacter, heightCharacter);
       } else {
         heightCharacter = this.height * 0.5;
         widthCharacter =
@@ -90,8 +121,8 @@ export class CharacterPreview {
         this.y +
         (character.spine.height + (this.height - character.spine.height) / 2);
 
-      console.log(character.spine.spineData.animations);
-      console.log(character.spine);
+      //console.log(character.spine.skeleton.data.skins);
+      //console.log(character.spine);
 
       this.container.addChild(character.container);
     });

@@ -49,9 +49,14 @@ export class FrameRateBar {
 
     //this.handleDragging = false;
 
+    
+
     this.slider.addChild(this.handle);
 
     this.container.addChild(this.slider);
+
+    //debugger
+    //this.container.addChild(fpsText);
   }
 
   onDragStart(event) {
@@ -64,7 +69,7 @@ export class FrameRateBar {
 
   onDragEnd(event) {
     this.container.interactive = false;
-    this.container.on("pointermove", this.onDrag.bind(this));
+    this.container.removeListener("pointermove")
     //this.handleDragging = false;
   }
 

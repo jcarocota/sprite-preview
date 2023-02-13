@@ -40,8 +40,22 @@ export class PlayPauseBar {
     background.endFill();
 
     background.interactive = true;
+
+    const animationText = new PIXI.Text();
+    animationText.anchor.set(0.5);
+    animationText.x = x + this.width / 2;
+    animationText.y = y + height / 2;
+    animationText.style = {
+      fontFamily: "Verdana",
+      fontSize: 18,
+      fill: ["#FFFFFF"],
+    };
+    animationText.text = "Play/Pause";
+
+    Globals.playPauseText = animationText;
+
     background.on("pointerdown", () => {
-      console.log(`You clicked play pause!!`);
+      //console.log(`You clicked play pause!!`);
 
       if (
         !Globals.selectedCharacter ||
@@ -60,24 +74,15 @@ export class PlayPauseBar {
           true
         );
         Globals.selectedCharacter.playingAnimation = true;
+        animationText.text = 'Pause';
       } else {
         Globals.selectedCharacter.spine.state.queue.animState.clearTracks();
         Globals.selectedCharacter.spine.skeleton.setToSetupPose();
         Globals.selectedCharacter.playingAnimation = false;
+        animationText.text = 'Play';
       }
-      console.log(Globals.selectedCharacter.spine.skeleton);
+      //console.log(Globals.selectedCharacter.spine.skeleton);
     });
-
-    const animationText = new PIXI.Text();
-    animationText.anchor.set(0.5);
-    animationText.x = x + this.width / 2;
-    animationText.y = y + height / 2;
-    animationText.style = {
-      fontFamily: "Verdana",
-      fontSize: 18,
-      fill: ["#FFFFFF"],
-    };
-    animationText.text = "Play/Pause";
 
     this.container.addChild(background);
     this.container.addChild(animationText);

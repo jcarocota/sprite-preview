@@ -8,6 +8,7 @@ export class Character {
     this.name = name;
     this.animations = animations;
     this.nameAnimationSelected = null;
+    this.nameSkinSelected = null;
     this.dragging = false;
     this.container = this.createContainer();
     this.lastPosition = {
@@ -52,8 +53,10 @@ export class Character {
     //this.container.zIndex = 1;
     Globals.selectedCharacter = this;
     Globals.animationButtonsBar.selectCharacter();
-    console.log("container", this.container.x, this.container.y);
-    console.log("spine", this.spine.x, this.spine.y);
+    Globals.skinButtonsBar.selectCharacter();
+    //console.log("container", this.container.x, this.container.y);
+    //console.log("spine", this.spine.x, this.spine.y);
+    Globals.playPauseText.text = "Play/Pause"; 
   }
 
   onTouchMove(event) {
@@ -64,7 +67,7 @@ export class Character {
     const currentPosition = { x: event.data.global.x, y: event.data.global.y };
     const offsetX = currentPosition.x - this.touchPosition.x;
     const offsetY = currentPosition.y - this.touchPosition.y;
-    console.log("offset", offsetX, offsetY);
+    //console.log("offset", offsetX, offsetY);
 
     this.container.x = this.lastPosition.x + offsetX;
     this.container.y = this.lastPosition.y + offsetY;
@@ -79,8 +82,8 @@ export class Character {
       x: this.container.x,
       y: this.container.y,
     };
-    console.log("container", this.lastPosition.x, this.lastPosition.y);
-    console.log("spine", this.spine.x, this.spine.y);
+    //console.log("container", this.lastPosition.x, this.lastPosition.y);
+    //console.log("spine", this.spine.x, this.spine.y);
 
     if (Globals.selectedCharacter.nameAnimationSelected) {
       //Globals.selectedCharacter.spine.state.setAnimation(0, Globals.selectedCharacter.nameAnimationSelected, true);

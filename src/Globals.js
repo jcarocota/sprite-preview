@@ -5,4 +5,7 @@ export const Globals = {
   selectedCharacter: null,
   characters: [],
   animationButtonsBar: null,
+  skinButtonsBar: null,
+  fps: null,
+  playPauseText: null,
 };

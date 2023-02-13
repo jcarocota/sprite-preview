@@ -50,6 +50,7 @@ export class AnimationButtonsBar {
         background.on("pointerdown", () => {
           console.log(`You clicked ${element.name}`);
           this.setAnimationCharacter(element.name);
+          Globals.playPauseText.text = "Pause";
         });
 
         const animationText = new PIXI.Text();

@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import { Globals } from "./Globals";
 import { MainScene } from "./MainScene";
 import { Config } from "./Config";
+import { ReaderUtils } from "./ReaderUtils";
 
 export class App {
   run() {
@@ -27,7 +28,33 @@ export class App {
     Globals.app = this.app;
 
     this.resizeWindow();
-    this.mainScene.addCharacterToPreview(null);
+
+    const fpsText = new PIXI.Text();
+    fpsText.anchor.set(0.5);
+    fpsText.x = Globals.appWitdh -100;
+    fpsText.y = 20;
+    fpsText.style = {
+      fontFamily: "monospace",
+      fontSize: 18,
+      fill: ["#000000"],
+    };
+
+    this.app.stage.addChild(fpsText);
+    
+
+    //console.log("PFS", PIXI.Ticker.shared.FPS);
+
+    /*this.app.ticker.add(() =>{
+      Globals.fps = this.app.ticker.FPS;
+      fpsText.text = "FPS: " + Globals.fps.toFixed(4);  
+      //console.log(Globals.fps);    
+
+    })*/
+
+    setInterval(() => {
+      Globals.fps = this.app.ticker.FPS;
+      fpsText.text = "FPS: " + Globals.fps.toFixed(4);  
+    },100);
   }
 
   resizeWindow() {
@@ -41,107 +68,87 @@ export class App {
   dragOverElement(ev) {
     ev.preventDefault();
     this.mainScene.showDragDropFilesMessage();
-    //console.log(ev);
-    //console.log("gatito");
+
   }
 
-  dropFile(ev) {
+  async dropFile(ev) {
     //console.log(ev);
     //ev.stopr
     ev.preventDefault();
     this.mainScene.hideDragDropFilesMessage();
 
-    /*const fs = require('fs');
-        const os = require('os');
-        const path = require('path');
+    if(!ev.dataTransfer.items) {
+      return;
+    }
 
-        let tmpDir;
-        const appPrefix = 'spine-preview';
+    //console.log("droped");
+
+    let rawSkeletonData;
+    let rawAtlasData;
+    let imageData;
+
+    const displayError = (error) => {
+      console.error(error);
+    };
+
+    let readerUtils = new ReaderUtils();
+
+    [...ev.dataTransfer.items].forEach((item, i) => {
+      // If dropped items aren't files, reject them
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+
+        if(!file) {
+          return;
+        }
+
+        //console.log(`… file[${i}].name = ${file.name}`);
+        //console.log(file);
+        //console.log(file.name);
+
+        let fileExtension = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name) : undefined;
+        fileExtension = fileExtension ? fileExtension[0] : undefined; 
+        console.log('fileExtension', fileExtension);
+
         
-        let nameAltas = null;
-        let nameJson = null;
-        let namePng = null;
 
-        //console.log("droped");
+        switch (fileExtension) {
+          case 'json':
+            let promiseSkeleton = readerUtils.promiseReadAsText(file);
+            promiseSkeleton
+              .then((r) => {
+                rawSkeletonData = JSON.parse(r);
+                this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+              })
+              .catch(displayError);
+            //nameJson = file.name;
+            break;
+          case 'atlas':
+            let promiseAtlas = readerUtils.promiseReadAsText(file);
+            promiseAtlas.then((r) => {
+              rawAtlasData = r;
+              this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+            }).catch(displayError); 
+            //nameAltas = file.name;
+            break;
+          case 'png':
+            let promiseImage = readerUtils.promiseReadAsURL(file); 
+            promiseImage.then((r) => {
+              imageData = r;
+              this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+            }).catch(displayError);
+            //namePng = file.name;
+            break;
+        }
 
-        if (ev.dataTransfer.items) {
-            // Use DataTransferItemList interface to access the file(s)
-            [...ev.dataTransfer.items].forEach((item, i) => {
-              // If dropped items aren't files, reject them
-              if (item.kind === 'file') {
-                const file = item.getAsFile();
-                console.log(`… file[${i}].name = ${file.name}`);
-                console.log(file);
-                console.log(file.name);
+      }
+    });
 
-                let fileExtension = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name) : undefined;
-                fileExtension = fileExtension ? fileExtension[0] : undefined; 
-                console.log('fileExtension', fileExtension);
+    
 
-                switch (fileExtension) {
-                    case 'json':
-                        nameJson = file.name;
-                        break;
-                    case 'atlas': 
-                        nameAltas = file.name;
-                        break;
-                    case 'png':
-                        namePng = file.name;
-                        break;
-                }
 
-                let fr = new FileReader();
-                fr.onload = (e) => {
-                    console.log("File read!");
-                    console.log(fr.result);
 
-                    try {
-                        tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), appPrefix));
-                        console.log('tmpDir', tmpDir);
-                        // the rest of your app goes here
-                      }
-                      catch {
-                        // handle error
-                      }
-                      finally {
-                        try {
-                          if (tmpDir) {
-                            fs.rmSync(tmpDir, { recursive: true });
-                          }
-                        }
-                        catch (e) {
-                          console.error(`An error has occurred while removing the temp folder at ${tmpDir}. Please remove it manually. Error: ${e}`);
-                        }
-                      }
-
-                    this.mainScene.addCharacterToPreview(e.target.result);
-                }
-
-                fr.readAsDataURL(file);
-
-                let url = window.URL.createObjectURL(file);
-                console.log("url", url);
-              }
-            });
-          } else {
-            // Use DataTransfer interface to access the file(s)
-            [...ev.dataTransfer.files].forEach((file, i) => {
-              console.log(`… file[${i}].name = ${file.name}`);
-              console.log(file);
-              console.log(file.path);
-              
-             
-            });
-          }
-
-          console.log('ev.dataTransfer', ev.dataTransfer);
-
-          if(!nameAltas || !nameJson || !namePng) {
-            //not complete... show error
-          } else {
-            //this.mainScene.addCharacterToPreview(null);
-          }
-*/
+    
   }
 
   mouseLeaveCanvas(ev) {
