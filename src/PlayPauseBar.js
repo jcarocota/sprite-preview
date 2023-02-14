@@ -43,7 +43,7 @@ export class PlayPauseBar {
 
     const animationText = new PIXI.Text();
     animationText.anchor.set(0.5);
-    animationText.x = x + this.width / 2;
+    animationText.x = x + width / 2;
     animationText.y = y + height / 2;
     animationText.style = {
       fontFamily: "Verdana",

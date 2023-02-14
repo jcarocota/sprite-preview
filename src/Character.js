@@ -57,6 +57,7 @@ export class Character {
     //console.log("container", this.container.x, this.container.y);
     //console.log("spine", this.spine.x, this.spine.y);
     Globals.playPauseText.text = "Play/Pause"; 
+    Globals.frameRateBar.setCharacterNameSelected();
   }
 
   onTouchMove(event) {

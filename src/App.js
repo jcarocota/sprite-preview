@@ -87,6 +87,8 @@ export class App {
     let rawAtlasData;
     let imageData;
 
+    let spineFileName;
+
     const displayError = (error) => {
       console.error(error);
     };
@@ -109,7 +111,10 @@ export class App {
         let fileExtension = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name) : undefined;
         fileExtension = fileExtension ? fileExtension[0] : undefined; 
         console.log('fileExtension', fileExtension);
-
+        
+        spineFileName = file.name;
+        spineFileName = spineFileName.split('.');
+        spineFileName = spineFileName[0];
         
 
         switch (fileExtension) {
@@ -118,7 +123,7 @@ export class App {
             promiseSkeleton
               .then((r) => {
                 rawSkeletonData = JSON.parse(r);
-                this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+                this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData, spineFileName);
               })
               .catch(displayError);
             //nameJson = file.name;
@@ -127,15 +132,14 @@ export class App {
             let promiseAtlas = readerUtils.promiseReadAsText(file);
             promiseAtlas.then((r) => {
               rawAtlasData = r;
-              this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+              this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData, spineFileName);
             }).catch(displayError); 
-            //nameAltas = file.name;
             break;
           case 'png':
             let promiseImage = readerUtils.promiseReadAsURL(file); 
             promiseImage.then((r) => {
               imageData = r;
-              this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+              this.mainScene.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData, spineFileName);
             }).catch(displayError);
             //namePng = file.name;
             break;

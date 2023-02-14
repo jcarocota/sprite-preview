@@ -6,6 +6,7 @@ export const Globals = {
   characters: [],
   animationButtonsBar: null,
   skinButtonsBar: null,
+  frameRateBar: null,
   fps: null,
   playPauseText: null,
 };

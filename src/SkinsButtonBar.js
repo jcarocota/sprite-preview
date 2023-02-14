@@ -41,7 +41,7 @@ export class SkinsButtonBar {
 
       Globals.selectedCharacter.spine.skeleton.data.skins.forEach((element) => {
         const background = new PIXI.Graphics();
-        background.beginFill(0xba4a00);
+        background.beginFill(0xf7dc6f);
         background.drawRect(x, y, width, height);
         background.endFill();
 

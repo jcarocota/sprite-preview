@@ -19,6 +19,7 @@ export class MainScene {
 
     Globals.animationButtonsBar = this.animationButtonsBar;
     Globals.skinButtonsBar = this.skinsButtonBar;
+    Globals.frameRateBar = this.frameRateBar;
   }
 
   init() {
@@ -229,9 +230,9 @@ export class MainScene {
     this.characterPreview.addCharacterToPreview(resource);
   }*/
 
-  addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData) {
+  addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData, spineFileName) {
     if (rawSkeletonData && rawAtlasData && imageData) {
-      this.characterPreview.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData);
+      this.characterPreview.addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData, spineFileName);
     }
   }
 }

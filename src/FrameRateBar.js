@@ -6,6 +6,7 @@ export class FrameRateBar {
   constructor() {
     this.width = null;
     this.container = null;
+    this.selectedCharacterText = null;
   }
 
   init(x = 10, y = 10, width = 100) {
@@ -57,6 +58,28 @@ export class FrameRateBar {
 
     //debugger
     //this.container.addChild(fpsText);
+  }
+
+  setCharacterNameSelected() {
+    if(!Globals.selectedCharacter) {
+      return;
+    }
+
+    if(this.selectedCharacterText) {
+      this.container.removeChild(this.selectedCharacterText);
+    }
+
+    this.selectedCharacterText = new PIXI.Text();
+    this.selectedCharacterText.x = 10;
+    this.selectedCharacterText.y = 10;
+    this.selectedCharacterText.style = {
+      fontFamily: "Verdana",
+      fontSize: 18,
+      fill: ["#FFFFFF"],
+    };
+    console.log(" Globals.selectedCharacter.name;",  Globals.selectedCharacter.name);
+    this.selectedCharacterText.text = "Selected character: " + Globals.selectedCharacter.name;
+    this.container.addChild(this.selectedCharacterText);
   }
 
   onDragStart(event) {

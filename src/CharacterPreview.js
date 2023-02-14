@@ -67,9 +67,9 @@ export class CharacterPreview {
       });
   }*/
 
-  addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData) {
-    const characterName = "character";
-    console.log("Inicio Character");
+  addCharacterToPreview(rawSkeletonData, rawAtlasData, imageData, spineFileName) {
+    const characterName = spineFileName;
+    console.log("Inicio Character", characterName);
 
     let spineAtlas = new TextureAtlas(rawAtlasData, (path, callback) => {
       callback(BaseTexture.from(imageData));

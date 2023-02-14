@@ -16,8 +16,11 @@ export class AnimationButtonsBar {
     this.width = width;
     this.height = height;
 
+    this.buttons = [];
+    
     this.createBackground();
     this.createButtons();
+    
   }
 
   createBackground() {
@@ -44,18 +47,31 @@ export class AnimationButtonsBar {
         const background = new PIXI.Graphics();
         background.beginFill(0xba4a00);
         background.drawRect(x, y, width, height);
+        background.lastX = x;
+        background.lastY = y;
+        background.lastWidth = width;
+        background.lastHeight = height;
+        //console.log(x,y);
         background.endFill();
 
         background.interactive = true;
         background.on("pointerdown", () => {
+          this.unselectAnimations();
           console.log(`You clicked ${element.name}`);
           this.setAnimationCharacter(element.name);
           Globals.playPauseText.text = "Pause";
+          let lastX = background.lastX;
+          let lastY = background.lastY;
+          console.log(lastX, lastY);
+          background.clear();
+          background.beginFill(0xf7dc6f );
+          background.drawRect(lastX, lastY, width, height);
+          background.endFill();
         });
 
         const animationText = new PIXI.Text();
         animationText.anchor.set(0.5);
-        animationText.x = x + this.width / 2;
+        animationText.x = x + width / 2;
         animationText.y = y + height / 2;
         animationText.style = {
           fontFamily: "Verdana",
@@ -64,11 +80,30 @@ export class AnimationButtonsBar {
         };
         animationText.text = element.name;
 
+        this.buttons.push(background);
+
         this.container.addChild(background);
         this.container.addChild(animationText);
         y += 40;
       });
     }
+  }
+
+  unselectAnimations() {
+
+    this.buttons.forEach(
+      button => {
+        let lastX = button.lastX;
+        let lastY = button.lastY;
+        let width = button.lastWidth;
+        let height = button.lastHeight;
+        button.clear();
+        button.beginFill(0xba4a00);
+        button.drawRect(lastX, lastY, width, height);
+        button.endFill();
+      }
+    )
+
   }
 
   setAnimationCharacter(animationName) {
